@@ -1,0 +1,200 @@
+caption: Make Entry
+tags: 
+title: $:/plugins/inmysocks/CategoryLists/Make Entry
+
+\define CreateEntryButton()
+<$fieldmangler tiddler={{$:/temp/Make$(ListType)$!!task_name}}>
+	<$button>Create $(ListType)$
+		<$reveal type='nomatch' state='$:/temp/Make$(ListType)$!!category' text=''>
+			<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=category $value={{$:/temp/Make$(ListType)$!!category}}/>
+			<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/SubCategories]indexes[]]'>
+				<$list filter='[[$:/temp/Make$(ListType)$]has[category]subcategory<currentTiddler>limit[1]]'>
+					<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=subcategory $value={{$:/temp/Make$(ListType)$!!subcategory}}/>
+					<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/$(ThisSubCategory)$/subsubcategories]indexes[]]'>
+						<$list filter='[[$:/temp/Make$(ListType)$]has[subsubcategory]subsubcategory<currentTiddler>limit[1]]'>
+							<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=subsubcategory $value={{$:/temp/Make$(ListType)$!!subsubcategory}}/>
+						</$list>
+					</$list>
+				</$list>
+			</$list>
+		</$reveal>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=description $value={{$:/temp/Make$(ListType)$!!short_description}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=text $value={{$:/temp/Make$(ListType)$!!text}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=tags $value={{$:/temp/Make$(ListType)$!!tags}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=start_day $value={{$:/temp/Make$(ListType)$!!start_day}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=start_month $value={{$:/temp/Make$(ListType)$!!start_month}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=start_year $value={{$:/temp/Make$(ListType)$!!start_year}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=due_day $value={{$:/temp/Make$(ListType)$!!due_day}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=due_month $value={{$:/temp/Make$(ListType)$!!due_month}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=due_year $value={{$:/temp/Make$(ListType)$!!due_year}}/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=created_day $value=<<now 0DD>>/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=created_month $value=<<now 0MM>>/>
+		<$action-setfield $tiddler={{$:/temp/Make$(ListType)$!!task_name}} $field=created_year $value=<<now YYYY>>/>
+		<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field=short_description $value=''/>
+		<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field=text $value=''/>
+		<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field=task_name $value=''/>
+		<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field=tags $value=''/>
+		<$action-sendmessage $message=tm-add-tag $param="""$(Tag)$"""/>
+	</$button>
+</$fieldmangler>
+\end
+
+\define SelectSubcategory()
+<$select tiddler='$:/temp/Make$(ListType)$' field='subcategory'>
+	<option value=''>--</option>
+	<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/SubCategories]indexes[]]'>
+		<option>
+			<$view tiddler=<<currentTiddler>> field=title/>
+		</option>
+	</$list>
+</$select>
+(<$button popup='$:/state/Make$(ListType)$/AddSubcategoryPopup'>New Subcategory
+</$button>)
+<$reveal type=popup state='$:/state/Make$(ListType)$/AddSubcategoryPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Subcategory Name:
+		<$edit-text tiddler='$:/temp/Make$(ListType)$' field='new_subcategory_name' placeholder='New Subcategory Name'/> 
+		<$button>
+			Create Subcategory
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories/$(ThisCategory)$/SubCategories' $index={{$:/temp/Make$(ListType)$!!new_subcategory_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field='new_subcategory_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+\end
+
+\define SelectSubSubCategory()
+<$select tiddler='$:/temp/Make$(ListType)$' field='subsubcategory'>
+	<option value=''>--</option>
+	<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/$(ThisSubCategory)$/subsubcategories]indexes[]]'>
+		<option>
+			<$view tiddler=<<currentTiddler>> field=title/>
+		</option>
+	</$list>
+</$select>
+(<$button popup='$:/state/Make$(ListType)$/AddSubSubcategoryPopup'>New Subsubcategory
+</$button>)
+<$reveal type=popup state='$:/state/Make$(ListType)$/AddSubSubcategoryPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Subsubcategory Name:
+		<$edit-text tiddler='$:/temp/Make$(ListType)$' field='new_subsubcategory_name' placeholder='New Subsubcategory Name'/> 
+		<$button>
+			Create Subsubcategory
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories/$(ThisCategory)$/$(ThisSubCategory)$/subsubcategories' $index={{$:/temp/Make$(ListType)$!!new_subsubcategory_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field='new_subsubcategory_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+\end
+
+\define thisSelectSubCategoryAndSubSubCategory()
+<$reveal type='nomatch' state='$:/temp/Make$(ListType)$!!category' text=''>
+	$(ListType)$ Subcategory:
+	<<SelectSubcategory>>
+	<br>
+	<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/SubCategories]indexes[]]'>
+		<$reveal type='match' state='$:/temp/Make$(ListType)$!!subcategory' text=<<currentTiddler>>>
+			$(ListType)$ Subsubcategory:
+			<<SelectSubSubCategory>>
+		</$reveal>
+	</$list>
+</$reveal>
+\end
+
+\define thisSetStartDate()
+Day: <$select tiddler='$:/temp/Make$(ListType)$' field='start_day'><option value=''>--</option><$list filter='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31'><option><<currentTiddler>></option></$list></$select>
+Month: <$select tiddler='$:/temp/Make$(ListType)$' field='start_month'><option value=''>--</option><$list filter='1 2 3 4 5 6 7 8 9 10 11 12'><option><<currentTiddler>></option></$list></$select>
+Year: <$select tiddler='$:/temp/Make$(ListType)$' field='start_year'><option value=''>--</option><$list filter='2015 2016 2017 2018 2019 2020'><option><<currentTiddler>></option></$list></$select>
+\end
+
+\define thisSetDueDate()
+Day: <$select tiddler='$:/temp/Make$(ListType)$' field='due_day'><option value=''>--</option><$list filter='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31'><option><<currentTiddler>></option></$list></$select>
+Month: <$select tiddler='$:/temp/Make$(ListType)$' field='due_month'><option value=''>--</option><$list filter='1 2 3 4 5 6 7 8 9 10 11 12'><option><<currentTiddler>></option></$list></$select>
+Year: <$select tiddler='$:/temp/Make$(ListType)$' field='due_year'><option value=''>--</option><$list filter='2015 2016 2017 2018 2019 2020'><option><<currentTiddler>></option></$list></$select>
+\end
+
+\define thisMainBody()
+$(ListType)$ Name: <$edit-text tiddler='$:/temp/Make$(ListType)$' field='task_name' class='tc-edit-texteditor' placeholder='$(ListType)$ Name'/>
+
+$(ListType)$ Category: 
+<$select tiddler='$:/temp/Make$(ListType)$' field='category'>
+	<option value=''>--</option>
+	<$list filter='[[$:/data/$(ListType)$ListCategories]indexes[]]'>
+		<option>
+			<$view tiddler=<<currentTiddler>> field=title/>
+		</option>
+	</$list>
+</$select>
+(<$button popup='$:/state/Make$(ListType)$/AddCategoryPopup'>New Category</$button>)
+<$reveal type=popup state='$:/state/Make$(ListType)$/AddCategoryPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Category Name:
+		<$edit-text tiddler='$:/temp/Make$(ListType)$' field='new_category_name' placeholder='New Category Name'/> 
+		<$button>
+			Create Category
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories' $index={{$:/temp/Make$(ListType)$!!new_category_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field='new_category_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+<br>
+<$set name=ThisCategory value={{$:/temp/Make$(ListType)$!!category}}>
+	<$set name=ThisSubCategory value={{$:/temp/Make$(ListType)$!!subcategory}}>
+		<<thisSelectSubCategoryAndSubSubCategory>>
+	</$set>
+</$set>
+
+Short Description: 
+<$edit-text tiddler='$:/temp/Make$(ListType)$' field='short_description' class='tc-edit-texteditor' placeholder='Short Description'/>
+
+Details: 
+<$edit-text tiddler='$:/temp/Make$(ListType)$' field='text' class='tc-edit-texteditor' placeholder='Details'/>
+
+Start Date:<br>
+<<thisSetStartDate>>
+
+Due Date:<br>
+<<thisSetDueDate>>
+
+Tags:
+
+Add tag: <$select tiddler='$:/temp/Make$(ListType)$' field='selected_tag'>
+	<$list filter='[[$:/data/$(ListType)$ListTags]indexes[]]'>
+		<option>
+			<<currentTiddler>>
+		</option>
+	</$list>
+</$select>
+<$fieldmangler tiddler='$:/temp/Make$(ListType)$'>
+	<$button>Add Tag
+		<$action-sendmessage $message='tm-add-tag' $param={{$:/temp/Make$(ListType)$!!selected_tag}}/>
+	</$button>
+</$fieldmangler> (<$button popup='$:/state/Make$(ListType)$/AddTagPopup'>New Tag</$button>)
+<$reveal type='popup' state='$:/state/Make$(ListType)$/AddTagPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Tag Name: <$edit-text tiddler='$:/temp/Make$(ListType)$' field='new_tag_name' placeholder='New Tag Name'/>
+		<$button>Create Tag
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListTags' $index={{$:/temp/Make$(ListType)$!!new_tag_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Make$(ListType)$' $field='new_tag_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+
+Current Tags:
+
+<$list filter='[[$:/temp/Make$(ListType)$]tags[]]'>
+<$fieldmangler tiddler='$:/temp/Make$(ListType)$'>
+<$view field='title'/> <$button>Remove<$action-sendmessage $message='tm-remove-tag' $param=<<currentTiddler>>/></$button>
+</$fieldmangler><br>
+</$list>
+
+<$set name=ThisCategory value={{$:/temp/Make$(ListType)$!!category}}>
+	<$set name=ThisSubCategory value={{$:/temp/Make$(ListType)$!!subcategory}}>
+		<$list filter='[{$:/temp/Make$(ListType)$!!task_name}has[title]]' emptyMessage=<<CreateEntryButton>>>
+			''Your task has the same name as another tiddler, change the task name. You can edit tasks using the [[task editor]]''
+		</$list>
+	</$set>
+</$set>
+\end
+
+<<thisMainBody>>

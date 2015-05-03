@@ -1,0 +1,138 @@
+tags: Templates
+title: $:/plugins/inmysocks/CategoryLists/EditEntryTemplate
+
+\define SelectSubcategory()
+<$select tiddler=<<currentTiddler>> field='subcategory'>
+	<option value=''>--</option>
+	<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/SubCategories]indexes[]]'>
+		<option>
+			<$view tiddler=<<currentTiddler>> field=title/>
+		</option>
+	</$list>
+</$select>
+(<$button popup='$:/state/Edit$(ListType)$/AddSubcategoryPopup'>New Subcategory
+</$button>)
+<$reveal type=popup state='$:/state/Edit$(ListType)$/AddSubcategoryPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Subcategory Name:
+		<$edit-text tiddler="$:/temp/Edit$(ListType)$" field='new_subcategory_name' placeholder='New Subcategory Name'/> 
+		<$button>
+			Create Subcategory
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories/$(ThisCategory)$/SubCategories' $index={{$:/temp/Edit$(ListType)$!!new_subcategory_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Edit$(ListType)$' $field='new_subcategory_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+\end
+
+\define SelectSubSubCategory()
+<$select tiddler=<<currentTiddler>> field='subsubcategory'>
+	<option value=''>--</option>
+	<$list filter='[[$:/data/$(ListType)$ListCategories/$(ThisCategory)$/$(ThisSubCategory)$/subsubcategories]indexes[]]'>
+		<option>
+			<$view tiddler=<<currentTiddler>> field=title/>
+		</option>
+	</$list>
+</$select>
+(<$button popup='$:/state/Edit$(ListType)$/AddSubSubcategoryPopup'>New Subsubcategory
+</$button>)
+<$reveal type=popup state='$:/state/Edit$(ListType)$/AddSubSubcategoryPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Subsubcategory Name:
+		<$edit-text tiddler='$:/state/Edit$(ListType)$' field='new_subsubcategory_name' placeholder='New Subsubcategory Name'/> 
+		<$button>
+			Create Subcategory
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories/$(ThisCategory)$/$(ThisSubCategory)$/subsubcategories' $index={{$:/temp/Edit$(ListType)$!!new_subsubcategory_name}} $value=1/>
+			<$action-setfield $tiddler='$:/state/Edit$(ListType)$' $field='new_subsubcategory_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+\end
+
+\define thisSelectSubCategoryAndSubSubCategory()
+<$reveal type='nomatch' state='!!category' text=''>
+	$(ListType)$ Subcategory:
+	<<SelectSubcategory>>
+	<br>
+	<$reveal type='nomatch' state='!!subcategory' text=''>
+		$(ListType)$ Subsubcategory:
+		<<SelectSubSubCategory>>
+	</$reveal>
+</$reveal>
+\end
+
+\define thisMainBody()
+<div mode=block>
+
+$(ListType)$ Name: ''__<$view field='title'/>__''
+
+$(ListType)$ Category: 
+<$select tiddler=<<currentTiddler>> field='category'>
+	<option value=''>--</option>
+	<$list filter='[[$:/data/$(ListType)$ListCategories]indexes[]]'>
+		<option>
+			<$view tiddler=<<currentTiddler>> field=title/>
+		</option>
+	</$list>
+</$select>
+(<$button popup='$:/state/Edit$(ListType)$/AddCategoryPopup'>New Category</$button>)
+<$reveal type=popup state='$:/state/Edit$(ListType)$/AddCategoryPopup'>
+	<div class='tc-drop-down tc-popup-keep' style='position:absolute'>
+		Category Name:
+		<$edit-text tiddler=$:/temp/Edit$(ListType)$' field='new_category_name' placeholder='New Category Name'/> 
+		<$button>
+			Create Category
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories' $index={{$:/temp/Edit$(ListType)$!!new_category_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Edit$(ListType)$' $field='new_category_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+<br>
+<$set name=ThisCategory value={{!!category}}>
+	<$set name=ThisSubCategory value={{!!subcategory}}>
+		<<thisSelectSubCategoryAndSubSubCategory>>
+	</$set>
+</$set>
+
+Short Description: 
+<$edit-text field='description' class='tc-edit-texteditor' placeholder='Short Description'/>
+
+Details: 
+<$edit-text field='text' class='tc-edit-texteditor' placeholder='Details'/>
+
+
+Tags:
+
+Add tag: <$select tiddler='$:/state/Edit$(ListType)$' field='selected_tag'>
+	<$list filter='[[$:/data/$(ListType)$ListTags]indexes[]]'>
+		<option>
+			<<currentTiddler>>
+		</option>
+	</$list>
+</$select>
+<$fieldmangler tiddler=<<currentTiddler>>>
+	<$button>Add Tag
+		<$action-sendmessage $message='tm-add-tag' $param={{$:/state/Edit$(ListType)$!!selected_tag}}/>
+	</$button>
+</$fieldmangler> (<$button popup='$:/state/Edit$(ListType)$/AddTagPopup'>New Tag</$button>)
+<$reveal type='popup' state='$:/state/Edit$(ListType)$/AddTagPopup'>
+	<div class='tc-drop-down tc-popup-keep'>
+		Tag Name: <$edit-text tiddler='$:/temp/Edit$(ListType)$' field='new_tag_name' placeholder='New Tag Name'/>
+		<$button>Create Tag
+			<$action-setfield $tiddler='$:/data/$(ListType)$ListTags' $index={{$:/temp/Edit$(ListType)$!!new_tag_name}} $value=1/>
+			<$action-setfield $tiddler='$:/temp/Edit$(ListType)$' $field='new_tag_name' $value=''/>
+		</$button>
+	</div>
+</$reveal>
+
+Current Tags:
+
+<$list filter='[is[current]tags[]]-[[$(Tag)$]]-[[$(FinishedTag)$]]' variable=ThisTag>
+<$fieldmangler tiddler=<<currentTiddler>>>
+<<ThisTag>> <$button>Remove<$action-sendmessage $message='tm-remove-tag' $param=<<ThisTag>>/></$button>
+</$fieldmangler><br>
+</$list>
+</div>
+\end
+
+<<thisMainBody>>

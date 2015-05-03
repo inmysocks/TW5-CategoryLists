@@ -1,0 +1,296 @@
+caption: Unfinished Items
+tags: 
+title: $:/plugins/inmysocks/CategoryLists/Unfinished Items
+
+\define thisListTemplate()
+<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!task' text=$(ListType)$ tag=tr>
+	<td style="""position:relative;width:5%;""">
+		<$button class="""tc-btn-invisible""" popup="""$:/state/popup/$(ListType)$list/$(CurrentEntry)$""" tooltip='$(ListType)$ Info'>{{$:/core/images/info-button}}
+		</$button>
+		<<thisEntryPopup>>
+	</td>
+	<td style='width:5%;'>
+		<$checkbox tiddler=<<CurrentEntry>> tag="""$(FinishedTag)$"""/>
+	</td>
+	<td style="""width:50%""">
+		<$link to=<<CurrentEntry>>>
+			<$view tiddler=<<CurrentEntry>> field="""title"""/>
+		</$link>
+	</td>
+	<td style="""width:40%""">
+		<$view tiddler=<<CurrentEntry>> field="""description"""/>
+	</td>
+	<td style='position:relative;'>
+		<$button class='tc-btn-invisible' tooltip='Edit $(ListType)$' popup="""$:/state/Edit$(ListType)$/popup/$(CurrentEntry)$""">
+			{{$:/core/images/edit-button}}
+		</$button>
+	</td>
+	<td style="""text-align:right;width:10%""">
+		<$fieldmangler tiddler=<<CurrentEntry>>>
+			<$button class='tc-btn-invisible' tooltip='Remove $(ListType)$'>{{$:/core/images/cancel-button}}
+				<$action-sendmessage $message="""tm-remove-tag""" $param="""$(Tag)$"""/>
+				<$action-sendmessage $message="""tm-remove-tag""" $param="""$(FinishedTag)$"""/>
+			</$button>
+		</$fieldmangler>
+	</td>
+</$reveal>
+<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!event' text=$(ListType)$ tag=tr>
+	<td style="""position:relative;width:5%;""">
+		<$button class="""tc-btn-invisible""" popup="""$:/state/popup/$(ListType)$list/$(CurrentEntry)$""" tooltip='$(ListType)$ Info'>{{$:/core/images/info-button}}
+		</$button>
+		<<thisEntryPopup>>
+	</td>
+	<td style='position:relative;'>
+		<$button class='tc-btn-invisible' tooltip='Edit $(ListType)$' popup="""$:/state/Edit$(ListType)$/popup/$(CurrentEntry)$""">
+			{{$:/core/images/edit-button}}
+		</$button>
+	</td>
+	<td style="""width:50%""">
+		<$link to=<<CurrentEntry>>>
+			<$view tiddler=<<CurrentEntry>> field="""title"""/>
+		</$link>
+	</td>
+	<td style="""width:40%""">
+		<$view tiddler=<<CurrentEntry>> field="""description"""/>
+	</td>
+	<td style="""text-align:right;width:20%""">
+		<$view tiddler=<<CurrentEntry>> field='start_day'/>/<$view tiddler=<<CurrentEntry>> field='start_month'/>/<$view tiddler=<<CurrentEntry>> field='start_year'/>
+	</td>
+</$reveal>
+<tr>
+	<td colspan=6 style='position:relative;top:100%'>
+		<$reveal type='popup' state="""$:/state/Edit$(ListType)$/popup/$(CurrentEntry)$""">
+			<div class='tc-popup-keep' style='border:solid;border-color:grey;border-width:1px;background-color:white;max-width:800px;padding:1em;width:95vw;top:1em;position:absolute;max-width:700px;top:-1em'>
+
+				<$tiddler tiddler=<<CurrentEntry>>>
+
+					<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/EditEntryTemplate' mode=block/>
+
+				</$tiddler>
+
+			</div>
+		</$reveal>
+	</td>
+</tr>
+\end
+
+\define thisEntryPopup()
+<$reveal type="""popup""" state="""$:/state/popup/$(ListType)$list/$(CurrentEntry)$""">
+	<div class="""tc-popup-keep tc-drop-down""">
+
+		<$transclude tiddler=<<CurrentEntry>> mode=block/>
+
+	</div>
+</$reveal>
+\end
+
+\define thisMakeShowCategoryButton()
+<$list filter='[[$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$]!text[show]]'>
+	<$button class='tc-btn-invisible' style='width:100%;height:100%;' set="""$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$""" setTo=show>
+		<div style='width:100%;text-align:left;position:absolute;'>
+			{{$:/core/images/right-arrow}}
+		</div>
+		<div style='width:100%;position:absolute;text-align:center;'>
+			<$view tiddler=<<CurrentCategory>> field="""title"""/>
+		</div>
+		<div style='width:100%;text-align:right;'>
+			{{$:/core/images/left-arrow}}
+		</div>
+	</$button>
+</$list>
+<$list filter='[[$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$]text[show]]'>
+	<$button class='tc-btn-invisible' style='width:100%;height:100%;' set="""$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$""" setTo=hide>
+		<div style='width:100%;text-align:left;position:absolute;'>
+			{{$:/core/images/down-arrow}}
+		</div>
+		<div style='width:100%;position:absolute;text-align:center;'>
+			<$view tiddler=<<CurrentCategory>> field="""title"""/>
+		</div>
+		<div style='width:100%;text-align:right;'>
+			{{$:/core/images/down-arrow}}
+		</div>
+	</$button>
+</$list>
+\end
+
+\define thisMakeCurrentCategoryDisplayState()
+$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$
+\end
+
+\define thisMakeShowSubCategoryButton()
+<$list filter='[[$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$]!text[show]]'>
+	<$button class='tc-btn-invisible' style='width:100%;height:100%;position:relative;' set="""$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$""" setTo=show>
+		<div style='width:100%;text-align:left;position:absolute'>
+			{{$:/core/images/right-arrow}}
+		</div>
+		<div style='width:100%;text-align:center;position:absolute'>
+			<$view tiddler="""$(CurrentCategory)$""" field="""title"""/> : <$view tiddler="""$(CurrentSubCategory)$""" field="""title"""/>
+		</div>
+		<div style='width:100%;text-align:right;position:relative;'>
+			{{$:/core/images/left-arrow}}
+		</div>
+	</$button>
+</$list>
+<$list filter='[[$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$]text[show]]'>
+	<$button class='tc-btn-invisible' style='width:100%;height:100%;position:relative;' set="""$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$""" setTo=hide>
+		<div style='width:100%;text-align:left;position:absolute;'>
+			{{$:/core/images/down-arrow}}
+		</div>
+		<div style='width:100%;text-align:center;position:absolute;'>
+			<$view tiddler="""$(CurrentCategory)$""" field="""title"""/> : <$view tiddler="""$(CurrentSubCategory)$""" field="""title"""/>
+		</div>
+		<div style='width:100%;text-align:right;position:relative;'>
+			{{$:/core/images/down-arrow}}
+		</div>
+	</$button>
+</$list>
+\end
+
+\define thisMakeCurrentSubCategoryDisplayState()
+$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$
+\end
+
+\define thisMakeShowSubSubCategoryButton()
+<$list filter='[[$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$/$(CurrentSubSubCategory)$]!text[show]]'>
+	<$button class='tc-btn-invisible' style='width:100%;height:100%;position:relative;background-color:beige;' set="""$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$/$(CurrentSubSubCategory)$""" setTo=show>
+		<div style='width:100%;text-align:center;'>
+			{{$:/core/images/right-arrow}} <$view tiddler="""$(CurrentCategory)$""" field="""title"""/> : <$view tiddler="""$(CurrentSubCategory)$""" field="""title"""/> :<$view tiddler="""$(CurrentSubSubCategory)$""" field="""title"""/> {{$:/core/images/left-arrow}}
+		</div>
+	</$button>
+</$list>
+<$list filter='[[$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$/$(CurrentSubSubCategory)$]text[show]]'>
+	<$button class='tc-btn-invisible' style='width:100%;height:100%;position:relative;background-color:beige;' set="""$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$/$(CurrentSubSubCategory)$""" setTo=hide>
+		<div style='width:100%;text-align:center;'>
+			{{$:/core/images/down-arrow}} <$view tiddler="""$(CurrentCategory)$""" field="""title"""/> : <$view tiddler="""$(CurrentSubCategory)$""" field="""title"""/> : <$view tiddler="""$(CurrentSubSubCategory)$""" field="""title"""/> {{$:/core/images/down-arrow}}
+		</div>
+	</$button>
+</$list>
+\end
+
+\define thisMakeCurrentSubSubCategoryDisplayState()
+$:/state/$(ListType)$List/ShowCategory/$(CurrentCategory)$/$(CurrentSubCategory)$/$(CurrentSubSubCategory)$
+\end
+
+\define thisMakeTable()
+<table style="""position:relative;width:100%""">
+	<$set name=CurrentCategory value='No Category'>
+		<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]!has[category]!has[draft.of]limit[1]]""">
+			<tr>
+				<th colspan=6 style="""background-color:grey""">
+					<<thisMakeShowCategoryButton>>
+				</th>
+			</tr>
+		</$list>
+		<$list filter='[<thisMakeCurrentCategoryDisplayState>text[show]]'>
+			<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]!has[category]!has[draft.of]sort[title]]"""  variable=CurrentEntry>
+				<<thisListTemplate>>
+			</$list>
+		</$list>
+	</$set>
+	<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]has[category]each[category]get[category]!has[draft.of]sort[title]]""" variable="""CurrentCategory""">
+		<tr style='width:100%;'>
+			<th colspan=6 style="""background-color:grey""">
+				<<thisMakeShowCategoryButton>>
+			</th>
+		</tr>
+		<$list filter='[<thisMakeCurrentCategoryDisplayState>text[show]]'>
+			<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]category<CurrentCategory>!has[subcategory]!has[draft.of]sort[title]]""" variable=CurrentEntry>
+				<<thisListTemplate>>
+			</$list>
+			<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]category<CurrentCategory>has[subcategory]each[subcategory]get[subcategory]!has[draft.of]sort[title]]""" variable="""CurrentSubCategory""">
+				<tr style='width:100%;position:relative;background-color:lightgrey'>
+					<td colspan=2 style='width:10%'>
+					</td>
+					<th colspan=2 style="""position:relative;width:80%;background-color:lightgrey""">
+						<<thisMakeShowSubCategoryButton>>
+					</th>
+					<td colspan=2 style='width:10%'>
+					</td>
+				</tr>
+				<$list filter='[<thisMakeCurrentSubCategoryDisplayState>text[show]]'>
+					<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]!has[subsubcategory]category<CurrentCategory>subcategory<CurrentSubCategory>!has[draft.of]sort[title]]""" variable=CurrentEntry>
+						<<thisListTemplate>>
+					</$list>
+					<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]category<CurrentCategory>subcategory<CurrentSubCategory>has[subsubcategory]each[subsubcategory]get[subsubcategory]!has[draft.of]sort[title]]""" variable="""CurrentSubSubCategory""">
+						<tr style='width:100%;background-color:beige'>
+							<td colspan=2 style='width:10%;'>
+							</td>
+							<th colspan=2 style="""position:relative;width:80%;background-color:beige;""">
+								<<thisMakeShowSubSubCategoryButton>>
+							</th>
+							<td colspan=2 style='width:10%;'>
+							</td>
+						</tr>
+						<$list filter='[<thisMakeCurrentSubSubCategoryDisplayState>text[show]]'>
+							<$list filter="""[tag[$(Tag)$]!tag[$(FinishedTag)$]$(SearchTag)$$(SelectedCategory)$$(SelectedSubCategory)$$(SelectedSubSubCategory)$regexp[(?i)$(RegExpSearch)$]category<CurrentCategory>subcategory<CurrentSubCategory>subsubcategory<CurrentSubSubCategory>!has[draft.of]sort[title]]""" variable=CurrentEntry>
+								<<thisListTemplate>>
+							</$list>
+						</$list>
+					</$list>
+				</$list>
+			</$list>
+		</$list>
+	</$list>
+</table>
+\end
+
+\define thisMakeSelectedCategory()
+category[$(CurrentCategory)$]
+\end
+
+\define thisMakeSelectedSubCategory()
+subcategory[$(CurrentSubCategory)$]
+\end
+
+\define thisMakeSelectedSubSubCategory()
+subsubcategory[$(CurrentSubSubCategory)$]
+\end
+
+<$set name=RegExpSearch value={{$:/temp/$(ListType)$List/Search!!search_text}}>
+	<!-- Category Selected -->
+	<$reveal type='nomatch' state='$:/state/$(ListType)$List/SelectedCategory' text=''>
+		<!-- Subcategory Selected -->
+		<$reveal type='nomatch' state='$:/state/$(ListType)$List/SelectedSubCategory' text=''>
+			<!-- Subsubcategory Selected -->
+			<$reveal type='nomatch' state='$:/state/$(ListType)$List/SelectedSubSubCategory' text=''>
+				<$set name=CurrentCategory value={{$:/state/$(ListType)$List/SelectedCategory}}>
+					<$set name=SelectedCategory value=<<thisMakeSelectedCategory>>>
+						<$set name=CurrentSubCategory value={{$:/state/$(ListType)$List/SelectedSubCategory}}>
+							<$set name=SelectedSubCategory value=<<thisMakeSelectedSubCategory>>>
+								<$set name=CurrentSubSubCategory value={{$:/state/$(ListType)$List/SelectedSubSubCategory}}>
+									<$set name=SelectedSubSubCategory value=<<thisMakeSelectedSubSubCategory>>>
+										<<thisMakeTable>>
+									</$set>
+								</$set>
+							</$set>
+						</$set>
+					</$set>
+				</$set>
+			</$reveal>
+			<!-- No Subsubcategory Selected -->
+			<$reveal type='match' state='$:/state/$(ListType)$List/SelectedSubSubCategory' text=''>
+				<$set name=CurrentCategory value={{$:/state/$(ListType)$List/SelectedCategory}}>
+					<$set name=SelectedCategory value=<<thisMakeSelectedCategory>>>
+						<$set name=CurrentSubCategory value={{$:/state/$(ListType)$List/SelectedSubCategory}}>
+							<$set name=SelectedSubCategory value=<<thisMakeSelectedSubCategory>>>
+								<<thisMakeTable>>
+							</$set>
+						</$set>
+					</$set>
+				</$set>
+			</$reveal>
+		</$reveal>
+		<!-- No Subcategory Selected -->
+		<$reveal type='match' state='$:/state/$(ListType)$List/SelectedSubCategory' text=''>
+			<$set name=CurrentCategory value={{$:/state/$(ListType)$List/SelectedCategory}}>
+				<$set name=SelectedCategory value=<<thisMakeSelectedCategory>>>
+					<<thisMakeTable>>
+				</$set>
+			</$set>
+		</$reveal>
+	</$reveal>
+	<!-- No Selected Category -->
+	<$reveal type='match' state='$:/state/$(ListType)$List/SelectedCategory' text=''>
+		<<thisMakeTable>>
+	</$reveal>
+</$set>
