@@ -4,19 +4,20 @@ At the moment this is presented as a task list, but it can be used for other thi
 
 __Description:__
 
-A task list split into categories. You can see an example [[here|http://inmysocks.tiddlyspot.com/#Change%20Log]]. Clicking on a section title collapses that section, clicking on the {{$:/core/images/info-button}} icon gives information about the task, the checkbox marks the task as finished, the {{$:/core/images/edit-button}} lets you edit a task and the {{$:/core/images/cancel-button}} removes the task from the list.
+A list split into categories. You can see an example [[here|http://inmysocks.tiddlyspot.com/#Change%20Log]]. Clicking on a section title collapses that section, clicking on the {{$:/core/images/info-button}} icon gives information about the task, the checkbox marks the task as finished, the {{$:/core/images/edit-button}} lets you edit a task and the {{$:/core/images/cancel-button}} removes the task from the list, if you are using a task list.
 
 __Features:__
 
-*multiple independent lists are possibly by changing the `TaskTag` and `FinishedTag` parameters
+*multiple independent lists are possibly by changing the `Tag` and `FinishedTag` parameters
+*task list or event list
 *collapsible categories
 *collapse all/expand all
 *searchable by title
 *searchable by category
 *searchable by tag
 *task creation interface
-*remove old tasks (this just removes the tags that label it for the list, it doesn't delete the tiddler)
-*start dates*
+*remove old entries (this just removes the tags that label it for the list, it doesn't delete the tiddler)
+*start dates
 *due dates*
 *task creation date*
 @@font-size:12px; *At the moment these values aren't used by the list, but I am planning on integrating the task list with my [[calendar plugin|http://inmysocks.tiddlyspot.com/#Calendar%20Plugin]] so that tasks entered on the list can be made to appear on the calendar. @@
@@ -24,25 +25,28 @@ __Features:__
 __Planned features:__
 
 *add sorting options
-*making non-tasklist type lists
+*making more lists types (the display options will be different, there may not be other differences)
 *integration with the [[calendar plugin|http://inmysocks.tiddlyspot.com/#Calendar%20Plugin]]
 *searchable by due, start and creation dates
+*set events as finished once their date has passed
 *(possibly) allow an infinite number of nested categories, this may not be practical
 
 __Usage:__
 
 ```
-<<CategoryList TaskTag:"Task" FinishedTag:"Done" ShowAddTask:"True" ShowSearch:"True">>
+<<CategoryList Tag:"Task" FinishedTag:"Done" ListType:"Task" ShowAddItem:"True" ShowSearch:"True" ShowFinished:"True">>
 ```
 
 __Parameters:__
 
 |!Name |!Description |
-|~TaskTag |The tag used to indicate that a tiddler should be on the list (Default: Task) |
+|~Tag |The tag used to indicate that a tiddler should be on the list (Default: Task) |
 |~FinishedTag |The tag added to finished tasks (Default: Done) |
-|~ShowAddTask |If this is set to anything other than `True` the `New Task` button doesn't appear. (Default: True) |
+|~ListType |The type of list to make, options are Task and Event (Default:Task) |
+|~ShowAddItem |If this is set to anything other than `True` the `New Task` button doesn't appear. (Default: True) |
 |~ShowSearch |If this is set to anything other than `True` than the search interface is hidden. (Default: True) |
+|~ShowFinished |If this is set to anything other than `True` than the finished tasks/events are hidden. (Default: True) |
 
 __Notes:__
 
-If you only want to have a single task list using the tags `Task` and `Done` than simply using `<<CategoryList>>` will work. If you want to have another list that is independent of the first list you can just put `<<CategoryList TaskTag:"School Task">>`. You can have as many lists as you want by changing the `TaskTag`, and if you want the `FinishedTag`.
+If you only want to have a single task list using the tags `Task` and `Done` than simply using `<<CategoryList>>` will work. If you want to have another list that is independent of the first list you can just put `<<CategoryList Tag:"School Task">>`. You can have as many lists as you want by changing the `TaskTag`, and if you want the `FinishedTag`.

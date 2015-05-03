@@ -61,15 +61,15 @@ tag{$:/state/$ListType$List/search/SelectedTag}
 </$button>
 \end
 
-\define CategoryList(Tag:"Task" FinishedTag:"Done" ListType:"Task" ShowAddTask:"True" ShowSearch:"True" ShowFinished:"True")
+\define CategoryList(Tag:"Task" FinishedTag:"Done" ListType:"Task" ShowAddItem:"True" ShowSearch:"True" ShowFinished:"True")
 <$set name=ListType value=$ListType$>
 
-	<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowAddTask$>
+	<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowAddItem$>
 		<$set name=Tag value="""$Tag$""">
-			<$button popup='$:/state/Items/MakeTaskPopup'>
+			<$button popup='$:/state/Items/MakeItemPopup'>
 				New $ListType$
 			</$button>
-			<$reveal type='popup' state='$:/state/Items/MakeTaskPopup'>
+			<$reveal type='popup' state='$:/state/Items/MakeItemPopup'>
 				<div class='tc-popup-keep' style='border:solid;border-color:grey;border-width:1px;background-color:white;width:80vw;padding:1em'>
 					<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Make Entry' mode=block/>
 				</div>
