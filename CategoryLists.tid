@@ -78,24 +78,24 @@ tag{$:/state/$(ListType)$List/search/SelectedTag}
 	</$reveal>
 
 	<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowSearch$>
-		Search: <$edit-text tiddler='$:/temp/$ListType$List/Search' field='search_text' placeholder='Title Search' class='tc-edit-texteditor'/>
+		Search: <$edit-text tiddler='$:/temp/$(ListType)$List/Search' field='search_text' placeholder='Title Search' class='tc-edit-texteditor'/>
 
 		Category:
-		<$select tiddler='$:/state/$ListType$List/SelectedCategory'>
+		<$select tiddler='$:/state/$(ListType)$List/SelectedCategory'>
 			<option value=''>Show All</option>
-			<$list filter='[[$:/data/$ListType$ListCategories]indexes[]]'>
+			<$list filter='[[$:/data/$(ListType)$ListCategories]indexes[]]'>
 				<$set name=CurrentCategory value=<<currentTiddler>>>
 					<option><$view field='title'/></option>
 				</$set>
 			</$list>
 		</$select>
 		<br>
-		<$set name=CurrentCategory value={{$:/state/$ListType$List/SelectedCategory}}>
-			<$reveal type='nomatch' state='$:/state/$ListType$List/SelectedCategory' text=''>
+		<$set name=CurrentCategory value={{$:/state/$(ListType)$List/SelectedCategory}}>
+			<$reveal type='nomatch' state='$:/state/$(ListType)$List/SelectedCategory' text=''>
 				<<inmysocksCategoryListsMakeSubCategorySelect>>
 			</$reveal>
 			<br>
-			<$set name=CurrentSubCategory value={{$:/state/$ListType$List/SelectedSubCategory}}>
+			<$set name=CurrentSubCategory value={{$:/state/$(ListType)$List/SelectedSubCategory}}>
 				<<inmysocksCategoryListsMakeSubSubCategorySelect>>
 			</$set>
 		</$set>
@@ -110,7 +110,7 @@ tag{$:/state/$(ListType)$List/search/SelectedTag}
 
 	<<thisExpandAllButton>> <<thisCollapseAllButton>>
 
-	<$reveal type='match' state='$:/state/$ListType$List/search/SelectedTag' text=''>
+	<$reveal type='match' state='$:/state/$(ListType)$List/search/SelectedTag' text=''>
 		<$set name=Tag value="""$Tag$""">
 			<$set name=FinishedTag value="""$FinishedTag$""">
 				<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowFinished$>
@@ -122,7 +122,7 @@ tag{$:/state/$(ListType)$List/search/SelectedTag}
 			</$set>
 		</$set>
 	</$reveal>
-	<$reveal type='nomatch' state='$:/state/$ListType$List/search/SelectedTag' text=''>
+	<$reveal type='nomatch' state='$:/state/$(ListType)$List/search/SelectedTag' text=''>
 		<$set name=SearchTag value=<<inmysocksCategoryListsSearchTag>>>
 			<$set name=Tag value="""$Tag$""">
 				<$set name=FinishedTag value="""$FinishedTag$""">
