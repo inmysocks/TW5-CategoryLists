@@ -1,0 +1,126 @@
+caption: Tasks
+tags: $:/tags/Macro 
+title: $:/plugins/inmysocks/CategoryLists/Tasks
+true: True
+
+\define inmysocksCategoryListsMakeSubCategorySelect()
+Subcategory: <$select tiddler='$:/state/TaskList/SelectedSubCategory'>
+	<option value=''>Show All</option>
+	<$list filter='[[$:/data/TaskListCategories/$(CurrentCategory)$/SubCategories]indexes[]]'>
+		<$set name=CurrentSubCategory value=<<currentTiddler>>>
+			<option><$view field='title'/></option>
+		</$set>
+	</$list>
+</$select>
+\end
+
+\define inmysocksCategoryListsMakeSubSubCategorySelect()
+<$list filter='[[$:/data/TaskListCategories/$(CurrentCategory)$/SubCategories]indexes[]]'>
+	<$list filter='[[$:/state/TaskList/SelectedSubCategory]text<currentTiddler>limit[1]]'>
+		Subsubcategory:
+		<$select tiddler='$:/state/TaskList/SelectedSubSubCategory'>
+			<option value=''>Show All</option>
+			<$list filter='[[$:/data/TaskListCategories/$(CurrentCategory)$/$(CurrentSubCategory)$/subsubcategories]indexes[]]'>
+				<$set name=CurrentSubSubCategory value=<<currentTiddler>>>
+					<option><$view field='title'/></option>
+				</$set>
+			</$list>
+		</$select>
+	</$list>
+</$list>
+\end
+
+\define inmysocksCategoryListsSelectCategorySearch()
+Tag:
+<$select tiddler='$:/state/TaskList/search/SelectedTag'>
+	<option value=''>Show All</option>
+	<$list filter="""[tag[$(TaskTag)$]!has[draft.of]tags[]sort[title]]-[[$(TaskTag)$]]-[[$(FinishedTag)$]]""">
+		<option><$view field='title'/></option>
+	</$list>
+</$select>
+\end
+
+\define inmysocksCategoryListsSearchTag()
+tag{$:/state/TaskList/search/SelectedTag}
+\end
+
+\define thisExpandAllButton()
+<$button>Expand All
+	<$list filter='[prefix[$:/state/TaskList/ShowCategory/]!text[show]]'>
+		<$action-setfield $tiddler=<<currentTiddler>> text=show/>
+	</$list>
+</$button>
+\end
+
+\define thisCollapseAllButton()
+<$button>Collapse All
+	<$list filter='[prefix[$:/state/TaskList/ShowCategory/]text[show]]'>
+		<$action-setfield $tiddler=<<currentTiddler>> text=hide/>
+	</$list>
+</$button>
+\end
+
+\define CategoryList(TaskTag:"Task" FinishedTag:"Done" ShowAddTask:"True" ShowSearch:"True")
+<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/Tasks!!true' text=$ShowAddTask$>
+	<$set name=TaskTag value="""$TaskTag$""">
+		<$button popup='$:/state/Tasks/MakeTaskPopup'>
+			New Task
+		</$button>
+		<$reveal type='popup' state='$:/state/Tasks/MakeTaskPopup'>
+			<div class='tc-popup-keep' style='border:solid;border-color:grey;border-width:1px;background-color:white;width:80vw;padding:1em'>
+				<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Make Task' mode=block/>
+			</div>
+		</$reveal>
+	</$set>
+</$reveal>
+
+<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/Tasks!!true' text=$ShowSearch$>
+	Search: <$edit-text tiddler='$:/temp/TaskList/Search' field='search_text' placeholder='Title Search' class='tc-edit-texteditor'/>
+
+	Category:
+	<$select tiddler='$:/state/TaskList/SelectedCategory'>
+		<option value=''>Show All</option>
+		<$list filter='[[$:/data/TaskListCategories]indexes[]]'>
+			<$set name=CurrentCategory value=<<currentTiddler>>>
+				<option><$view field='title'/></option>
+			</$set>
+		</$list>
+	</$select>
+	<br>
+	<$set name=CurrentCategory value={{$:/state/TaskList/SelectedCategory}}>
+		<$reveal type='nomatch' state='$:/state/TaskList/SelectedCategory' text=''>
+			<<inmysocksCategoryListsMakeSubCategorySelect>>
+		</$reveal>
+		<br>
+		<$set name=CurrentSubCategory value={{$:/state/TaskList/SelectedSubCategory}}>
+			<<inmysocksCategoryListsMakeSubSubCategorySelect>>
+		</$set>
+	</$set>
+	<br>
+	<$set name=TaskTag value="""$TaskTag$""">
+		<$set name=FinishedTag value="""$FinishedTag$""">
+			<<inmysocksCategoryListsSelectCategorySearch>>
+		</$set>
+	</$set>
+
+</$reveal>
+
+<<thisExpandAllButton>> <<thisCollapseAllButton>>
+
+<$reveal type='match' state='$:/state/TaskList/search/SelectedTag' text=''>
+	<$set name=TaskTag value="""$TaskTag$""">
+		<$set name=FinishedTag value="""$FinishedTag$""">
+			<<tabs "[[$:/plugins/inmysocks/CategoryLists/Unfinished Tasks]][[$:/plugins/inmysocks/CategoryLists/Finished Tasks]]">>
+		</$set>
+	</$set>
+</$reveal>
+<$reveal type='nomatch' state='$:/state/TaskList/search/SelectedTag' text=''>
+	<$set name=SearchTag value=<<inmysocksCategoryListsSearchTag>>>
+		<$set name=TaskTag value="""$TaskTag$""">
+			<$set name=FinishedTag value="""$FinishedTag$""">
+				<<tabs "[[$:/plugins/inmysocks/CategoryLists/Unfinished Tasks]][[$:/plugins/inmysocks/CategoryLists/Finished Tasks]]">>
+			</$set>
+		</$set>
+	</$set>
+</$reveal>
+\end
