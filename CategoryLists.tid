@@ -5,9 +5,9 @@ task: Task
 event: Event
 
 \define inmysocksCategoryListsMakeSubCategorySelect()
-Subcategory: <$select tiddler='$:/state/$ListType$List/SelectedSubCategory'>
+Subcategory: <$select tiddler='$:/state/$(ListType)$List/SelectedSubCategory'>
 	<option value=''>Show All</option>
-	<$list filter='[[$:/data/$ListType$ListCategories/$(CurrentCategory)$/SubCategories]indexes[]]'>
+	<$list filter='[[$:/data/$(ListType)$ListCategories/$(CurrentCategory)$/SubCategories]indexes[]]'>
 		<$set name=CurrentSubCategory value=<<currentTiddler>>>
 			<option><$view field='title'/></option>
 		</$set>
@@ -16,12 +16,12 @@ Subcategory: <$select tiddler='$:/state/$ListType$List/SelectedSubCategory'>
 \end
 
 \define inmysocksCategoryListsMakeSubSubCategorySelect()
-<$list filter='[[$:/data/$ListType$ListCategories/$(CurrentCategory)$/SubCategories]indexes[]]'>
-	<$list filter='[[$:/state/$ListType$List/SelectedSubCategory]text<currentTiddler>limit[1]]'>
+<$list filter='[[$:/data/$(ListType)$ListCategories/$(CurrentCategory)$/SubCategories]indexes[]]'>
+	<$list filter='[[$:/state/$(ListType)$List/SelectedSubCategory]text<currentTiddler>limit[1]]'>
 		Subsubcategory:
-		<$select tiddler='$:/state/$ListType$List/SelectedSubSubCategory'>
+		<$select tiddler='$:/state/$(ListType)$List/SelectedSubSubCategory'>
 			<option value=''>Show All</option>
-			<$list filter='[[$:/data/$ListType$ListCategories/$(CurrentCategory)$/$(CurrentSubCategory)$/subsubcategories]indexes[]]'>
+			<$list filter='[[$:/data/$(ListType)$ListCategories/$(CurrentCategory)$/$(CurrentSubCategory)$/subsubcategories]indexes[]]'>
 				<$set name=CurrentSubSubCategory value=<<currentTiddler>>>
 					<option><$view field='title'/></option>
 				</$set>
@@ -33,7 +33,7 @@ Subcategory: <$select tiddler='$:/state/$ListType$List/SelectedSubCategory'>
 
 \define inmysocksCategoryListsSelectCategorySearch()
 Tag:
-<$select tiddler='$:/state/$ListType$List/search/SelectedTag'>
+<$select tiddler='$:/state/$(ListType)$List/search/SelectedTag'>
 	<option value=''>Show All</option>
 	<$list filter="""[tag[$(Tag)$]!has[draft.of]tags[]sort[title]]-[[$(Tag)$]]-[[$(FinishedTag)$]]""">
 		<option><$view field='title'/></option>
@@ -42,7 +42,7 @@ Tag:
 \end
 
 \define inmysocksCategoryListsSearchTag()
-tag{$:/state/$ListType$List/search/SelectedTag}
+tag{$:/state/$(ListType)$List/search/SelectedTag}
 \end
 
 \define thisExpandAllButton()
