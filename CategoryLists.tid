@@ -61,81 +61,81 @@ tag{$:/state/$(ListType)$List/search/SelectedTag}
 </$button>
 \end
 
+\define inmysocksCategoryListsMainBody()
+<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$(ShowSearch)$>
+	Search: <$edit-text tiddler='$:/temp/$(ListType)$List/Search' field='search_text' placeholder='Title Search' class='tc-edit-texteditor'/>
+
+	Category:
+	<$select tiddler='$:/state/$(ListType)$List/SelectedCategory'>
+		<option value=''>Show All</option>
+		<$list filter='[[$:/data/$(ListType)$ListCategories]indexes[]]'>
+			<$set name=CurrentCategory value=<<currentTiddler>>>
+				<option><$view field='title'/></option>
+			</$set>
+		</$list>
+	</$select>
+	<br>
+	<$set name=CurrentCategory value={{$:/state/$(ListType)$List/SelectedCategory}}>
+		<$reveal type='nomatch' state='$:/state/$(ListType)$List/SelectedCategory' text=''>
+			<<inmysocksCategoryListsMakeSubCategorySelect>>
+		</$reveal>
+		<br>
+		<$set name=CurrentSubCategory value={{$:/state/$(ListType)$List/SelectedSubCategory}}>
+			<<inmysocksCategoryListsMakeSubSubCategorySelect>>
+		</$set>
+	</$set>
+	<br>
+	<<inmysocksCategoryListsSelectCategorySearch>>
+
+</$reveal>
+
+<<thisExpandAllButton>> <<thisCollapseAllButton>>
+
+<$reveal type='match' state='$:/state/$(ListType)$List/search/SelectedTag' text=''>
+	<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$(ShowFinished)$>
+		<<tabs "[[$:/plugins/inmysocks/CategoryLists/Unfinished Items]][[$:/plugins/inmysocks/CategoryLists/Finished Items]]">>
+	</$reveal>
+	<$reveal type='nomatch' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$(ShowFinished)$>
+		<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Unfinished Items' mode=block/>
+	</$reveal>
+</$reveal>
+<$reveal type='nomatch' state='$:/state/$(ListType)$List/search/SelectedTag' text=''>
+	<$set name=SearchTag value=<<inmysocksCategoryListsSearchTag>>>
+		<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$(ShowFinished)$>
+			<<tabs "[[$:/plugins/inmysocks/CategoryLists/Unfinished Items]][[$:/plugins/inmysocks/CategoryLists/Finished Items]]">>
+		</$reveal>
+		<$reveal type='nomatch' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$(ShowFinished)$>
+			<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Unfinished Items' mode=block/>
+		</$reveal>
+	</$set>
+</$reveal>
+\end
+
 \define CategoryList(Tag:"Task" FinishedTag:"Done" ListType:"Task" ShowAddItem:"True" ShowSearch:"True" ShowFinished:"True")
 <$set name=ListType value=$ListType$>
+	<$set name=Tag value="""$Tag$""">
+		<$set name=FinishedTag value="""$FinishedTag$""">
+			<$set name=ShowSearch value=$ShowSearch$>
+				<$set name=ShowFinished value=$ShowFinished$>
 
-	<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowAddItem$>
-		<$set name=Tag value="""$Tag$""">
-			<$button popup='$:/state/Items/MakeItemPopup'>
-				New $ListType$
-			</$button>
-			<$reveal type='popup' state='$:/state/Items/MakeItemPopup'>
-				<div class='tc-popup-keep' style='border:solid;border-color:grey;border-width:1px;background-color:white;width:80vw;padding:1em'>
-					<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Make Entry' mode=block/>
-				</div>
-			</$reveal>
-		</$set>
-	</$reveal>
-
-	<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowSearch$>
-		Search: <$edit-text tiddler='$:/temp/$(ListType)$List/Search' field='search_text' placeholder='Title Search' class='tc-edit-texteditor'/>
-
-		Category:
-		<$select tiddler='$:/state/$(ListType)$List/SelectedCategory'>
-			<option value=''>Show All</option>
-			<$list filter='[[$:/data/$(ListType)$ListCategories]indexes[]]'>
-				<$set name=CurrentCategory value=<<currentTiddler>>>
-					<option><$view field='title'/></option>
-				</$set>
-			</$list>
-		</$select>
-		<br>
-		<$set name=CurrentCategory value={{$:/state/$(ListType)$List/SelectedCategory}}>
-			<$reveal type='nomatch' state='$:/state/$(ListType)$List/SelectedCategory' text=''>
-				<<inmysocksCategoryListsMakeSubCategorySelect>>
-			</$reveal>
-			<br>
-			<$set name=CurrentSubCategory value={{$:/state/$(ListType)$List/SelectedSubCategory}}>
-				<<inmysocksCategoryListsMakeSubSubCategorySelect>>
-			</$set>
-		</$set>
-		<br>
-		<$set name=Tag value="""$Tag$""">
-			<$set name=FinishedTag value="""$FinishedTag$""">
-				<<inmysocksCategoryListsSelectCategorySearch>>
-			</$set>
-		</$set>
-
-	</$reveal>
-
-	<<thisExpandAllButton>> <<thisCollapseAllButton>>
-
-	<$reveal type='match' state='$:/state/$(ListType)$List/search/SelectedTag' text=''>
-		<$set name=Tag value="""$Tag$""">
-			<$set name=FinishedTag value="""$FinishedTag$""">
-				<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowFinished$>
-					<<tabs "[[$:/plugins/inmysocks/CategoryLists/Unfinished Items]][[$:/plugins/inmysocks/CategoryLists/Finished Items]]">>
-				</$reveal>
-				<$reveal type='nomatch' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowFinished$>
-					<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Unfinished Items' mode=block/>
-				</$reveal>
-			</$set>
-		</$set>
-	</$reveal>
-	<$reveal type='nomatch' state='$:/state/$(ListType)$List/search/SelectedTag' text=''>
-		<$set name=SearchTag value=<<inmysocksCategoryListsSearchTag>>>
-			<$set name=Tag value="""$Tag$""">
-				<$set name=FinishedTag value="""$FinishedTag$""">
-					<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowFinished$>
-						<<tabs "[[$:/plugins/inmysocks/CategoryLists/Unfinished Items]][[$:/plugins/inmysocks/CategoryLists/Finished Items]]">>
+					<$reveal type='match' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowAddItem$>
+						<$set name=Tag value="""$Tag$""">
+							<$button popup='$:/state/Items/MakeItemPopup'>
+								New $ListType$
+							</$button>
+							<$reveal type='popup' state='$:/state/Items/MakeItemPopup'>
+								<div class='tc-popup-keep' style='border:solid;border-color:grey;border-width:1px;background-color:white;width:80vw;padding:1em'>
+									<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Make Entry' mode=block/>
+								</div>
+							</$reveal>
+						</$set>
 					</$reveal>
-					<$reveal type='nomatch' state='$:/plugins/inmysocks/CategoryLists/CategoryLists!!true' text=$ShowFinished$>
-						<$transclude tiddler='$:/plugins/inmysocks/CategoryLists/Unfinished Items' mode=block/>
-					</$reveal>
+
+					<<inmysocksCategoryListsMainBody>>
+
 				</$set>
 			</$set>
 		</$set>
-	</$reveal>
-
+	</$set>
 </$set>
 \end
