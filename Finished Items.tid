@@ -12,20 +12,20 @@ title: $:/plugins/inmysocks/CategoryLists/Finished Items
 	<td style='width:5%;'>
 		<$checkbox tiddler=<<CurrentEntry>> tag="""$(FinishedTag)$"""/>
 	</td>
-	<td style="""width:50%""">
+	<td style="""width:45%""">
 		<$link to=<<CurrentEntry>>>
 			<$view tiddler=<<CurrentEntry>> field="""title"""/>
 		</$link>
 	</td>
-	<td style="""width:40%""">
+	<td style="""width:35%""">
 		<$view tiddler=<<CurrentEntry>> field="""description"""/>
 	</td>
-	<td style='position:relative;'>
+	<td style='position:relative;width:5%;'>
 		<$button class='tc-btn-invisible' tooltip='Edit $(ListType)$' popup="""$:/state/Edit$(ListType)$/popup/$(CurrentEntry)$""">
 			{{$:/core/images/edit-button}}
 		</$button>
 	</td>
-	<td style="""text-align:right;width:10%""">
+	<td style="""text-align:right;width:5%""">
 		<$fieldmangler tiddler=<<CurrentEntry>>>
 			<$button class='tc-btn-invisible' tooltip='Remove $(ListType)$'>{{$:/core/images/cancel-button}}
 				<$action-sendmessage $message="""tm-remove-tag""" $param="""$(Tag)$"""/>
@@ -40,17 +40,17 @@ title: $:/plugins/inmysocks/CategoryLists/Finished Items
 		</$button>
 		<<thisEntryPopup>>
 	</td>
-	<td style='position:relative;'>
+	<td style='position:relative;width:5%;'>
 		<$button class='tc-btn-invisible' tooltip='Edit $(ListType)$' popup="""$:/state/Edit$(ListType)$/popup/$(CurrentEntry)$""">
 			{{$:/core/images/edit-button}}
 		</$button>
 	</td>
-	<td style="""width:50%""">
+	<td style="""width:40%""">
 		<$link to=<<CurrentEntry>>>
 			<$view tiddler=<<CurrentEntry>> field="""title"""/>
 		</$link>
 	</td>
-	<td style="""width:40%""">
+	<td style="""width:30%""">
 		<$view tiddler=<<CurrentEntry>> field="""description"""/>
 	</td>
 	<td style="""text-align:right;width:20%""">
