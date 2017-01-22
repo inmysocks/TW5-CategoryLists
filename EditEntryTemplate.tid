@@ -79,7 +79,7 @@ $(ListType)$ Category:
 <$reveal type=popup state='$:/state/Edit$(ListType)$/AddCategoryPopup'>
 	<div class='tc-drop-down tc-popup-keep' style='position:absolute'>
 		Category Name:
-		<$edit-text tiddler=$:/temp/Edit$(ListType)$' field='new_category_name' placeholder='New Category Name'/> 
+		<$edit-text tiddler='$:/temp/Edit$(ListType)$' field='new_category_name' placeholder='New Category Name'/> 
 		<$button>
 			Create Category
 			<$action-setfield $tiddler='$:/data/$(ListType)$ListCategories' $index={{$:/temp/Edit$(ListType)$!!new_category_name}} $value=1/>
